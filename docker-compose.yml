@@ -1,0 +1,13 @@
+version: "3.8"
+
+services:
+  mysql:
+    image: mysql
+    container_name: pipelore-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: docker-root-password
+      MYSQL_DATABASE: pipelore-db
+      MYSQL_USER: mysql
+      MYSQL_PASSWORD: docker
+    ports:
+      - "3306:3306"

@@ -11,7 +11,19 @@ export function generateId(): string {
 
 export function formatDate(date: Date | string | null): string {
   if (!date) return '-';
-  const d = typeof date === 'string' ? new Date(date) : date;
+
+  // Se for string no formato YYYY-MM-DD, adicionar timezone local
+  if (typeof date === 'string') {
+    const [year, month, day] = date.split('T')[0].split('-');
+    const d = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+    return d.toLocaleDateString('pt-BR', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+    });
+  }
+
+  const d = date as Date;
   return d.toLocaleDateString('pt-BR', {
     day: '2-digit',
     month: '2-digit',

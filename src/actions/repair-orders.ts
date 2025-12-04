@@ -5,7 +5,7 @@ import { repairOrders } from '@/db/schema';
 import { generateId } from '@/lib/utils';
 import type { CreateRepairOrderInput, UpdateRepairOrderInput } from '@/lib/validations';
 import { createRepairOrderSchema, updateRepairOrderSchema } from '@/lib/validations';
-import { eq } from 'drizzle-orm';
+import { and, eq, lt, notInArray } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 
 export async function createRepairOrder(data: CreateRepairOrderInput) {
@@ -107,6 +107,32 @@ export async function deleteRepairOrder(id: string) {
     return {
       success: false,
       error: 'Erro ao deletar ordem de serviço',
+    };
+  }
+}
+
+export async function getLateRepairOrders() {
+  try {
+    const now = new Date();
+
+    // Buscar ordens com dueDate ultrapassado e status diferente de COMPLETED e CANCELLED
+    const lateOrders = await db
+      .select()
+      .from(repairOrders)
+      .where(
+        and(
+          lt(repairOrders.dueDate, now),
+          notInArray(repairOrders.status, ['COMPLETED', 'CANCELLED'])
+        )
+      );
+
+    return { success: true, data: lateOrders };
+  } catch (error) {
+    console.error('Error fetching late repair orders:', error);
+    return {
+      success: false,
+      error: 'Erro ao buscar ordens atrasadas',
+      data: [],
     };
   }
 }

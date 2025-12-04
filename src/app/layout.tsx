@@ -1,3 +1,5 @@
+import { Navigation } from '@/components/navigation';
+import { ToastProvider } from '@/components/ui/toast';
 import type { Metadata } from 'next';
 import './globals.css';
 
@@ -14,7 +16,10 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
       <body className="antialiased">
-        {children}
+        <ToastProvider>
+          <Navigation />
+          {children}
+        </ToastProvider>
       </body>
     </html>
   );

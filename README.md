@@ -1,4 +1,4 @@
-# 🏢 Pipelore - Sistema de Gestão de Ordens de Serviço
+# 🏢 Sistema de Gestão de Ordens de Serviço
 
 Sistema completo de gestão de condomínios para administração de ordens de serviço de reparo, desenvolvido com Next.js 15, React 19 e TypeScript.
 

@@ -155,4 +155,43 @@ Retorna ordens atrasadas (prazo vencido e status ≠ COMPLETED/CANCELLED).
 }
 ```
 
+## 🔄 CI/CD
+
+O projeto possui pipelines automatizados configurados com **GitHub Actions**:
+
+### Continuous Integration (CI)
+
+**Arquivo:** `.github/workflows/ci.yml`
+
+Pipeline executado em **pull requests** e **pushes na branch master**:
+
+- ✅ **Checkout** do código
+- ✅ **Setup Node.js 20** com cache npm
+- ✅ **Instalação** de dependências
+- ✅ **ESLint** - Verificação de qualidade de código
+- ✅ **Testes** - Execução da suite completa de testes
+- ✅ **Build** - Compilação do projeto Next.js
+
+### Continuous Deployment (CD)
+
+**Arquivo:** `.github/workflows/deploy.yml`
+
+Pipeline de deploy automático executado em **pushes na branch master**:
+
+- 🚀 **Checkout** do código
+- 🚀 **Instalação** de dependências
+- 🚀 **Build** do projeto
+- 🚀 **Deploy para Vercel** usando `vercel-action`
+
+**Secrets necessários:**
+- `VERCEL_TOKEN` - Token de autenticação da Vercel
+- `VERCEL_ORG_ID` - ID da organização na Vercel
+- `VERCEL_PROJECT_ID` - ID do projeto na Vercel
+
+### Fluxo de Trabalho
+
+1. Desenvolver feature em branch separada
+2. Abrir Pull Request → **CI executa automaticamente**
+3. Após aprovação e merge na `master` → **Deploy automático para produção**
+
 ---

@@ -194,5 +194,4 @@ Pipeline de deploy automático executado em **pushes na branch master**:
 2. Abrir Pull Request → **CI executa automaticamente**
 3. Após aprovação e merge na `master` → **Deploy automático para produção**
 
-
 ---

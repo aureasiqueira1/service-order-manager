@@ -50,7 +50,7 @@ export function StatsDashboard({ orders }: StatsDashboardProps) {
   ];
 
   return (
-    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
       {statCards.map((stat) => {
         const Icon = stat.icon;
         return (

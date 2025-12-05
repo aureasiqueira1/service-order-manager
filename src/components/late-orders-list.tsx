@@ -1,5 +1,6 @@
 'use client';
 
+import { getLateRepairOrders } from '@/actions/repair-orders';
 import { Priority, RepairOrderEntity } from '@/domain/types';
 import { AlertCircle, ArrowDownUp } from 'lucide-react';
 import { useMemo, useState } from 'react';
@@ -23,7 +24,8 @@ const PRIORITY_ORDER: Record<Priority, number> = {
   LOW: 1,
 };
 
-export function LateOrdersList({ orders }: LateOrdersListProps) {
+export function LateOrdersList({ orders: initialOrders }: LateOrdersListProps) {
+  const [orders, setOrders] = useState<RepairOrderEntity[]>(initialOrders);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState<RepairOrderEntity | null>(null);
@@ -74,16 +76,24 @@ export function LateOrdersList({ orders }: LateOrdersListProps) {
     setIsDeleteModalOpen(true);
   };
 
-  const handleFormSuccess = () => {
+  const handleFormSuccess = async () => {
     setIsFormOpen(false);
     setSelectedOrder(null);
-    window.location.reload();
+    // Atualizar lista de ordens sem recarregar a página
+    const result = await getLateRepairOrders();
+    if (result.success) {
+      setOrders(result.data);
+    }
   };
 
-  const handleDeleteSuccess = () => {
+  const handleDeleteSuccess = async () => {
     setIsDeleteModalOpen(false);
     setSelectedOrder(null);
-    window.location.reload();
+    // Atualizar lista de ordens sem recarregar a página
+    const result = await getLateRepairOrders();
+    if (result.success) {
+      setOrders(result.data);
+    }
   };
 
   return (

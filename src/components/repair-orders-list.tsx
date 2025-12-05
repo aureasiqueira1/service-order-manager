@@ -1,5 +1,6 @@
 'use client';
 
+import { getRepairOrders } from '@/actions/repair-orders';
 import { Priority, RepairOrderEntity, Status, STATUS_LABELS, STATUS_VALUES } from '@/domain/types';
 import { ArrowDownUp, Filter, Plus } from 'lucide-react';
 import { useMemo, useState } from 'react';
@@ -82,18 +83,40 @@ export function RepairOrdersList({ initialOrders }: RepairOrdersListProps) {
     setIsDeleteModalOpen(true);
   };
 
-  const handleFormSuccess = () => {
+  const handleFormSuccess = async () => {
     setIsFormOpen(false);
     setSelectedOrder(null);
-    // Recarregar a página para obter dados atualizados
-    window.location.reload();
+    // Atualizar lista de ordens sem recarregar a página
+    const result = await getRepairOrders();
+    if (result.success) {
+      // Filtrar ordens atrasadas (elas aparecem apenas na página dedicada)
+      const now = new Date();
+      const filteredOrders = result.data.filter(order => {
+        const isLate = new Date(order.dueDate) < now &&
+                       order.status !== 'COMPLETED' &&
+                       order.status !== 'CANCELLED';
+        return !isLate; // Retorna apenas as NÃO atrasadas
+      });
+      setOrders(filteredOrders);
+    }
   };
 
-  const handleDeleteSuccess = () => {
+  const handleDeleteSuccess = async () => {
     setIsDeleteModalOpen(false);
     setSelectedOrder(null);
-    // Recarregar a página para obter dados atualizados
-    window.location.reload();
+    // Atualizar lista de ordens sem recarregar a página
+    const result = await getRepairOrders();
+    if (result.success) {
+      // Filtrar ordens atrasadas (elas aparecem apenas na página dedicada)
+      const now = new Date();
+      const filteredOrders = result.data.filter(order => {
+        const isLate = new Date(order.dueDate) < now &&
+                       order.status !== 'COMPLETED' &&
+                       order.status !== 'CANCELLED';
+        return !isLate; // Retorna apenas as NÃO atrasadas
+      });
+      setOrders(filteredOrders);
+    }
   };
 
   const handleNewOrder = () => {
